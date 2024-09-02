@@ -25,14 +25,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("HUMMING BIRD."),
         actions: [
           if (MediaQuery.of(context).size.width > 600)
             Row(
               children: [
-                TextButton(onPressed: () {}, child: Text('Episodes')),
-                TextButton(onPressed: () {}, child: Text('About')),
+                TextButton(onPressed: () {}, child: const Text('Episodes')),
+                TextButton(onPressed: () {}, child: const Text('About')),
               ],
             )
         ],
@@ -41,7 +43,15 @@ class HomePage extends StatelessWidget {
           ? Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(child: Text('SKILL UP NOW')),
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.green,  // Set the background color to green
+              ),
+              child: Text(
+                'SKILL UP NOW',
+                style: TextStyle(color: Colors.white),  // Optional: Set text color to white
+              ),
+            ),
             ListTile(
               title: const Text('Episodes'),
               onTap: () {},
@@ -75,7 +85,15 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Join course'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Set the background color to green
+                ),
+                child: const Text(
+                  'Join course',
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
+                ),
               ),
             ],
           ),

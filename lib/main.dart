@@ -43,13 +43,18 @@ class HomePage extends StatelessWidget {
           ? Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.green,  // Set the background color to green
               ),
-              child: Text(
-                'SKILL UP NOW',
-                style: TextStyle(color: Colors.white),  // Optional: Set text color to white
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'SKILL UP NOW',
+                  style: TextStyle(color: Colors.white),  // Optional: Set text color to white
+                ),
               ),
             ),
             ListTile(

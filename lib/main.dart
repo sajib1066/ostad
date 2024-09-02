@@ -53,10 +53,12 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
+              leading: const Icon(Icons.video_camera_back_outlined),
               title: const Text('Episodes'),
               onTap: () {},
             ),
             ListTile(
+              leading: const Icon(Icons.messenger_outlined),
               title: const Text('About'),
               onTap: () {},
             ),

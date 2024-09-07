@@ -1,109 +1,163 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HUMMING BIRD',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const HomePage(),
+      debugShowCheckedModeBanner: false,
+      home: ShoppingCartPage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ShoppingCartPage extends StatefulWidget {
+  @override
+  _ShoppingCartPageState createState() => _ShoppingCartPageState();
+}
+
+class _ShoppingCartPageState extends State<ShoppingCartPage> {
+  int pulloverQty = 1;
+  int tshirtQty = 1;
+  int sportDressQty = 1;
+
+  int pulloverPrice = 51;
+  int tshirtPrice = 30;
+  int sportDressPrice = 43;
+
+  int get totalAmount =>
+      (pulloverQty * pulloverPrice) +
+          (tshirtQty * tshirtPrice) +
+          (sportDressQty * sportDressPrice);
+
+  void _showSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Congratulations! Checkout successful.'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("HUMMING BIRD."),
-        actions: [
-          if (MediaQuery.of(context).size.width > 600)
-            Row(
+        title: Text('My Bag'),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(8.0),
               children: [
-                TextButton(onPressed: () {}, child: const Text('Episodes')),
-                TextButton(onPressed: () {}, child: const Text('About')),
+                _buildCartItem('Pullover', 'Black', 'L', pulloverQty,
+                    pulloverPrice, (value) {
+                      setState(() {
+                        pulloverQty = value;
+                      });
+                    }),
+                _buildCartItem('T-Shirt', 'Gray', 'L', tshirtQty, tshirtPrice,
+                        (value) {
+                      setState(() {
+                        tshirtQty = value;
+                      });
+                    }),
+                _buildCartItem('Sport Dress', 'Black', 'M', sportDressQty,
+                    sportDressPrice, (value) {
+                      setState(() {
+                        sportDressQty = value;
+                      });
+                    }),
               ],
-            )
+            ),
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total amount:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '\$${totalAmount.toString()}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                backgroundColor: Colors.redAccent,
+                minimumSize: Size(double.infinity, 50), // Button width
+              ),
+              onPressed: () => _showSnackBar(context),
+              child: Text(
+                'CHECK OUT',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
+          ),
         ],
       ),
-      drawer: MediaQuery.of(context).size.width <= 600
-          ? Drawer(
-        child: ListView(
+    );
+  }
+
+  Widget _buildCartItem(String name, String color, String size, int quantity,
+      int price, ValueChanged<int> onQuantityChanged) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.green,  // Set the background color to green
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'SKILL UP NOW',
-                  style: TextStyle(color: Colors.white),  // Optional: Set text color to white
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.video_camera_back_outlined),
-              title: const Text('Episodes'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.messenger_outlined),
-              title: const Text('About'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      )
-          : null,
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                'FLUTTER WEB. THE BASICS',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'In this course we will go over the basics of using Flutter Web for development. Topics will include Responsive Layout, Deploying, Font Changes, Hover functionality, Modals and more.',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // Set the background color to green
-                ),
-                child: const Text(
-                  'Join course',
-                  style: TextStyle(
-                    color: Colors.white
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  SizedBox(height: 5),
+                  Text('Color: $color   Size: $size'),
+                ],
               ),
-            ],
-          ),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.remove_circle_outline),
+                  onPressed: quantity > 1
+                      ? () {
+                    onQuantityChanged(quantity - 1);
+                  }
+                      : null,
+                ),
+                Text(quantity.toString(), style: TextStyle(fontSize: 16)),
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline),
+                  onPressed: () {
+                    onQuantityChanged(quantity + 1);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(width: 10),
+            Text('\$${price * quantity}', style: TextStyle(fontSize: 16)),
+          ],
         ),
       ),
     );
